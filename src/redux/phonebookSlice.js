@@ -19,12 +19,26 @@ const phonebookSlice = createSlice({
   reducers: {
     addUser: {
       reducer(state, action) {
-        state.contacts.push(action.payload);
+        const { name, number } = action.payload;
+
+        const isContactExists = state.contacts.some(
+          contact => contact.name.toLowerCase() === name.toLowerCase()
+        );
+
+        if (isContactExists) {
+          alert('Будь-ласка перевірте дані.');
+          return;
+        }
+
+        state.contacts.push({
+          id: nanoid(3),
+          name,
+          number,
+        });
       },
       prepare(name, number) {
         return {
           payload: {
-            id: nanoid(3),
             name,
             number,
           },
